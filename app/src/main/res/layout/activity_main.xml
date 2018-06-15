@@ -206,10 +206,10 @@
         app:srcCompat="@drawable/nucleus" />
 
     <ImageView
-        android:id="@+id/ImageSpriteBall"
-        android:contentDescription="@string/imageSpriteBall"
+        android:id="@+id/imageSpriteBall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/imageSpriteBall"
         app:layout_constraintBottom_toTopOf="@+id/backgroundImage"
         app:layout_constraintEnd_toStartOf="@+id/nucelus"
         app:layout_constraintHorizontal_bias="0.5"
