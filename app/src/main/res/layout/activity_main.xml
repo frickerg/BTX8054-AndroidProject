@@ -139,7 +139,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:adjustViewBounds="false"
-        android:background="@drawable/centerOfGravity"
+        android:background="@drawable/center_of_gravity"
         android:cropToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
