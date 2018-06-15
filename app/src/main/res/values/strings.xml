@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Center Of Gravity</string>
+    <string name="viewBg">The background image of outer space</string>
+    <string name="paddleTop">Paddle (top)</string>
+    <string name="paddleLeft">Paddle (left)</string>
+    <string name="paddleBottom">Paddle (bottom)</string>
+    <string name="paddleRight">Paddle (right)</string>
+    <string name="nucelus">Nucelus</string>
+    <string name="imageSpriteBall">Image Sprite Ball</string>
+    <string name="current">Current</string>
+    <string name="count">Count:</string>
+    <string name="highscore">Highscore</string>
+    <string name="local">Local:</string>
+    <string name="global">Global:</string>
+    <string name="default_score">0000</string>
 </resources>
