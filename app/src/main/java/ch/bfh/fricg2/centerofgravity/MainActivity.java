@@ -17,10 +17,10 @@ import android.widget.LinearLayout;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
-    public static final float GRAVITY = 9.81f;      // g constant (static, no acceleration)
-    public static final float BALL_SPEED = 1.25f;   // human walking speed (4.5 km/h)
-    private int currentAngle;
-    public boolean isGameStarted = false;
+    public static final float GRAVITY = 9.81f; // g constant (static, no acceleration)
+    public static final float BALL_SPEED = 4.5f;
+    private static int currentAngle;
+    public boolean isGameStarted, isIntersecting = false;
 
     private ImageView paddleTop, paddleBottom, paddleLeft, paddleRight, ball;
 
@@ -79,6 +79,34 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (isGameStarted && event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            Rect rcBall = new Rect();
+            Rect rcTop = new Rect();
+            Rect rcBottom = new Rect();
+            Rect rcLeft = new Rect();
+            Rect rcRight = new Rect();
+
+            ball.getHitRect(rcBall);
+            paddleTop.getHitRect(rcTop);
+            paddleBottom.getHitRect(rcBottom);
+            paddleLeft.getHitRect(rcLeft);
+            paddleRight.getHitRect(rcRight);
+
+            if(isIntersecting){
+                while(Rect.intersects(rcBall, rcTop) ||
+                    Rect.intersects(rcBall, rcBottom) ||
+                    Rect.intersects(rcBall, rcLeft) ||
+                    Rect.intersects(rcBall, rcRight)) {
+                    // do nothing
+                }
+                isIntersecting = false;
+            }
+            if (Rect.intersects(rcBall, rcTop) ||
+                    Rect.intersects(rcBall, rcBottom) ||
+                    Rect.intersects(rcBall, rcLeft) ||
+                    Rect.intersects(rcBall, rcRight)) {
+                MainActivity.turnAround();
+            }
+
             y = Math.round(event.values[0] * GRAVITY);
             x = Math.round(event.values[1] * GRAVITY);
 
@@ -96,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             int moveY = calculateYCoordinateBasedOnAngle(currentAngle, BALL_SPEED);
             ball.setX(ball.getX() + moveX);
             ball.setY(ball.getY() + moveY);
+            System.out.println(currentAngle);
         }
     }
 
@@ -126,5 +155,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public static int calculateYCoordinateBasedOnAngle(int angle, float distance) {
         int y = Math.round(distance * (float) Math.sin(angle));
         return y;
+    }
+
+    private static void turnAround() {
+        MainActivity.currentAngle = (MainActivity.currentAngle + 180) % 360;
     }
 }
