@@ -150,10 +150,9 @@
 
     <ImageView
         android:id="@+id/paddleBottom"
-        android:contentDescription="@string/paddleBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/paddleBottom"
         app:layout_constraintBottom_toBottomOf="@+id/backgroundImage"
         app:layout_constraintEnd_toStartOf="@+id/backgroundImage"
         app:layout_constraintHorizontal_bias="0.5"
@@ -162,10 +161,9 @@
 
     <ImageView
         android:id="@+id/paddleTop"
-        android:contentDescription="@string/paddleTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:contentDescription="@string/paddleTop"
         app:layout_constraintEnd_toStartOf="@+id/backgroundImage"
         app:layout_constraintStart_toEndOf="@+id/backgroundImage"
         app:layout_constraintTop_toTopOf="@+id/backgroundImage"
@@ -175,7 +173,6 @@
         android:id="@+id/paddleLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:contentDescription="@string/paddleLeft"
         app:layout_constraintBottom_toTopOf="@+id/backgroundImage"
         app:layout_constraintStart_toStartOf="@+id/backgroundImage"
@@ -186,7 +183,6 @@
         android:id="@+id/paddleRight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:contentDescription="@string/paddleRight"
         app:layout_constraintBottom_toTopOf="@+id/backgroundImage"
         app:layout_constraintEnd_toEndOf="@+id/backgroundImage"

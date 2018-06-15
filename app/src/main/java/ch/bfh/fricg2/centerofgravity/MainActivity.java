@@ -13,7 +13,6 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import java.util.Random;
 
@@ -62,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     currentAngle = r.nextInt(360 - 1) + 1;
                     int moveX = calculateXCoordinateBasedOnAngle(currentAngle);
                     int moveY = calculateYCoordinateBasedOnAngle(currentAngle);
-                    ball.setX(ball.getX() + moveX);
-                    ball.setY(ball.getY() + moveY);
                 }
             }
         });
