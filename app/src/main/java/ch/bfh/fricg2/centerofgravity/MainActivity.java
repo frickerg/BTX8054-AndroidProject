@@ -1,5 +1,6 @@
 package ch.bfh.fricg2.centerofgravity;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
@@ -49,17 +50,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isGameStarted = !isGameStarted;
+                if(isGameStarted) {
+                    Intent i = getBaseContext().getPackageManager()
+                            .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                } else {
+                    isGameStarted = true;
+
+                    Random r = new Random();
+                    currentAngle = r.nextInt(360 - 1) + 1;
+                    int moveX = calculateXCoordinateBasedOnAngle(currentAngle);
+                    int moveY = calculateYCoordinateBasedOnAngle(currentAngle);
+                    ball.setX(ball.getX() + moveX);
+                    ball.setY(ball.getY() + moveY);
+                }
             }
         });
 
 
-        Random r = new Random();
-        currentAngle = r.nextInt(360 - 1) + 1;
-        int moveX = calculateXCoordinateBasedOnAngle(currentAngle, GRAVITY);
-        int moveY = calculateYCoordinateBasedOnAngle(currentAngle, GRAVITY);
-        ball.setX(ball.getX() + moveX);
-        ball.setY(ball.getY() + moveY);
     }
 
     @Override
@@ -92,12 +101,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             paddleRight.getHitRect(rcRight);
 
             if(isIntersecting){
-                while(Rect.intersects(rcBall, rcTop) ||
-                    Rect.intersects(rcBall, rcBottom) ||
-                    Rect.intersects(rcBall, rcLeft) ||
-                    Rect.intersects(rcBall, rcRight)) {
-                    // do nothing
-                }
+                while(Rect.intersects(rcBall, rcTop)){}
+                while(Rect.intersects(rcBall, rcBottom)){}
+                while(Rect.intersects(rcBall, rcLeft)){}
+                while(Rect.intersects(rcBall, rcRight)){}
                 isIntersecting = false;
             }
             if (Rect.intersects(rcBall, rcTop) ||
@@ -120,8 +127,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 paddleRight.setY(paddleRight.getY() + y);
             }
 
-            int moveX = calculateXCoordinateBasedOnAngle(currentAngle, BALL_SPEED);
-            int moveY = calculateYCoordinateBasedOnAngle(currentAngle, BALL_SPEED);
+            int moveX = calculateXCoordinateBasedOnAngle(currentAngle);
+            int moveY = calculateYCoordinateBasedOnAngle(currentAngle);
             ball.setX(ball.getX() + moveX);
             ball.setY(ball.getY() + moveY);
             System.out.println(currentAngle);
@@ -148,12 +155,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    public static int calculateXCoordinateBasedOnAngle(int angle, float distance){
-        return Math.round(distance * (float) Math.cos(angle));
+    public static int calculateXCoordinateBasedOnAngle(int angle){
+        return Math.round(BALL_SPEED * (float) Math.cos(angle));
     }
 
-    public static int calculateYCoordinateBasedOnAngle(int angle, float distance) {
-        int y = Math.round(distance * (float) Math.sin(angle));
+    public static int calculateYCoordinateBasedOnAngle(int angle) {
+        int y = Math.round(BALL_SPEED * (float) Math.sin(angle));
         return y;
     }
 
