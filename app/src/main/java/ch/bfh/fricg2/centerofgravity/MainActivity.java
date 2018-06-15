@@ -8,11 +8,12 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.content.Context;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener{
+    private static float GRAVITY = 9.81f;
+    private ImageView paddleTop, paddleBottom, paddleLeft, paddleRight;
+
     private SensorManager sensorManager;
     private Sensor accelerometer;
 
@@ -23,12 +24,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        // Set window fullscreen and remove title bar, and force landscape orientation
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        paddleTop = findViewById(R.id.paddleTop);
+        paddleBottom = findViewById(R.id.paddleBottom);
+        paddleLeft = findViewById(R.id.paddleLeft);
+        paddleRight = findViewById(R.id.paddleRight);
     }
 
     @Override
@@ -48,11 +52,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            x = event.values[0];
-            System.out.println(x);
-            y = event.values[1];
-            ImageView paddleTop = findViewById(R.id.paddleTop);
-            paddleTop.setX(paddleTop.getX() + x);
+            x = event.values[0] * GRAVITY;
+            y = event.values[1] * GRAVITY;
+
+            paddleTop.setX(paddleTop.getX() + y);
+            paddleBottom.setX(paddleBottom.getX() - y);
+            paddleLeft.setY(paddleLeft.getY() - x);
+            paddleRight.setY(paddleRight.getY() + x);
         }
     }
 
