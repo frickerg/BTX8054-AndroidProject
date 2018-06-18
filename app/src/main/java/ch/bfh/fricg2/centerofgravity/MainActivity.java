@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public boolean isGameStarted, isIntersecting = false;
 
     private ImageView paddleTop, paddleBottom, paddleLeft, paddleRight, ball;
+    private Rect rcBall, rcTop, rcBottom, rcLeft, rcRight;
 
     private SensorManager sensorManager;
     private Sensor accelerometer;
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         paddleRight = findViewById(R.id.paddleRight);
         ball = findViewById(R.id.imageSpriteBall);
 
+        rcBall = new Rect();
+        rcTop = new Rect();
+        rcBottom = new Rect();
+        rcLeft = new Rect();
+        rcRight = new Rect();
+
         final Button clickButton = (Button) findViewById(R.id.buttonPlay);
         clickButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +66,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                     Random r = new Random();
                     currentAngle = r.nextInt(360 - 1) + 1;
-                    int moveX = calculateXCoordinateBasedOnAngle(currentAngle);
-                    int moveY = calculateYCoordinateBasedOnAngle(currentAngle);
                 }
             }
         });
@@ -85,12 +90,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (isGameStarted && event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            Rect rcBall = new Rect();
-            Rect rcTop = new Rect();
-            Rect rcBottom = new Rect();
-            Rect rcLeft = new Rect();
-            Rect rcRight = new Rect();
-
             ball.getHitRect(rcBall);
             paddleTop.getHitRect(rcTop);
             paddleBottom.getHitRect(rcBottom);
@@ -98,19 +97,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             paddleRight.getHitRect(rcRight);
 
             if(isIntersecting){
-                while(Rect.intersects(rcBall, rcTop)){}
-                while(Rect.intersects(rcBall, rcBottom)){}
-                while(Rect.intersects(rcBall, rcLeft)){}
-                while(Rect.intersects(rcBall, rcRight)){}
-                isIntersecting = false;
+                if(Rect.intersects(rcBall, rcTop) ||
+                        Rect.intersects(rcBall, rcBottom) ||
+                        Rect.intersects(rcBall, rcLeft) ||
+                        Rect.intersects(rcBall, rcRight)) {
+                    int moveX = calculateXCoordinateBasedOnAngle(currentAngle);
+                    int moveY = calculateYCoordinateBasedOnAngle(currentAngle);
+                    System.out.println("currentPosition X : " + ball.getX());
+                    System.out.println("currentPosition Y : " + ball.getY());
+                    System.out.println("moving relatively towards X : " + moveX);
+                    System.out.println("moving relatively towards Y : " + moveY);
+                    System.out.println("absolute moving X : " + ball.getX() + moveX);
+                    System.out.println("absolute moving Y : " + ball.getY() + moveY);
+                    System.out.println("-------------");
+                    ball.setTranslationX(ball.getTranslationX() + moveX);
+                    ball.setTranslationY(ball.getTranslationY() + moveY);
+                } else {
+                    isIntersecting = false;
+                }
+            } else {
+                if (Rect.intersects(rcBall, rcTop) ||
+                        Rect.intersects(rcBall, rcBottom) ||
+                        Rect.intersects(rcBall, rcLeft) ||
+                        Rect.intersects(rcBall, rcRight)) {
+                    MainActivity.turnAround();
+                    isIntersecting = true;
+                    System.out.println("turnAround");
+                } else {
+                    isIntersecting = false;
+                }
             }
-            if (Rect.intersects(rcBall, rcTop) ||
-                    Rect.intersects(rcBall, rcBottom) ||
-                    Rect.intersects(rcBall, rcLeft) ||
-                    Rect.intersects(rcBall, rcRight)) {
-                MainActivity.turnAround();
-            }
-
             y = Math.round(event.values[0] * GRAVITY);
             x = Math.round(event.values[1] * GRAVITY);
 
